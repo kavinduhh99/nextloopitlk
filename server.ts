@@ -63,7 +63,8 @@ async function startServer() {
       res.status(200).json({ success: "Message sent successfully!" });
     } catch (error) {
       console.error("Gmail Email error:", error);
-      res.status(500).json({ error: "Failed to send message. Please try again later." });
+      const errorMessage = error instanceof Error ? error.message : "Details unknown";
+      res.status(500).json({ error: `Failed to send message: ${errorMessage}` });
     }
   });
 

@@ -370,10 +370,12 @@ const Contact = () => {
     service: 'Web App Development',
     message: ''
   });
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
+    setErrorMessage('');
 
     try {
       const response = await fetch('/api/contact', {
@@ -382,15 +384,19 @@ const Contact = () => {
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
         setStatus('success');
         setFormData({ name: '', email: '', service: 'Web App Development', message: '' });
       } else {
         setStatus('error');
+        setErrorMessage(data.error || 'Failed to send message');
       }
     } catch (error) {
       console.error(error);
       setStatus('error');
+      setErrorMessage('A network error occurred. Please try again.');
     }
   };
 
@@ -484,7 +490,7 @@ const Contact = () => {
                 <p className="md:col-span-2 text-emerald-400 text-sm font-medium">Message sent successfully! We'll get back to you soon.</p>
               )}
               {status === 'error' && (
-                <p className="md:col-span-2 text-red-400 text-sm font-medium">Failed to send message. Please try again later.</p>
+                <p className="md:col-span-2 text-red-400 text-sm font-medium">{errorMessage}</p>
               )}
             </form>
           </div>
