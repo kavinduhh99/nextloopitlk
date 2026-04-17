@@ -647,6 +647,19 @@ const Chatbot = () => {
 };
 
 const Footer = () => {
+  const socialLinks = [
+    { icon: Facebook, href: "https://web.facebook.com/nextloopit" },
+    { 
+      icon: ({ className }: { className?: string }) => (
+        <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+          <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.933zm-1.292 19.494h2.039L6.486 3.24H4.298l13.311 17.407z" />
+        </svg>
+      ), 
+      href: "https://x.com/NextloopIT" 
+    },
+    { icon: Linkedin, href: "https://www.linkedin.com/company/nextloopit/" },
+  ];
+
   return (
     <footer className="py-12 border-t border-white/5">
       <div className="max-w-7xl mx-auto px-6">
@@ -659,9 +672,9 @@ const Footer = () => {
           </div>
           
           <div className="flex items-center gap-6">
-            {[Facebook, Twitter, Linkedin, Instagram].map((Icon, i) => (
-              <a key={i} href="#" className="text-slate-400 hover:text-white transition-colors">
-                <Icon className="w-5 h-5" />
+            {socialLinks.map((social, i) => (
+              <a key={i} href={social.href} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors">
+                <social.icon className="w-5 h-5" />
               </a>
             ))}
           </div>
