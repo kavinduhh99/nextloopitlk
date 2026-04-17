@@ -12,6 +12,23 @@ async function startServer() {
 
   app.use(express.json());
 
+  // Health check route
+  app.get("/api/health", (req, res) => {
+    const user = process.env.EMAIL_USER || "";
+    const pass = process.env.EMAIL_PASS || "";
+    
+    res.json({ 
+      status: "ok", 
+      env: {
+        hasEmailUser: !!user,
+        hasEmailPass: !!pass,
+        userHasSpaces: user !== user.trim(),
+        passHasSpaces: pass !== pass.trim(),
+        userHasQuotes: user.startsWith('"') || user.endsWith('"'),
+      }
+    });
+  });
+
   // API Route for Contact Form
   app.post("/api/contact", async (req, res) => {
     const { name, email, service, message } = req.body;
@@ -22,18 +39,19 @@ async function startServer() {
 
     try {
       console.log("Attempting to send email via Gmail...");
-      if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      const user = process.env.EMAIL_USER?.trim();
+      const pass = process.env.EMAIL_PASS?.replace(/\s+/g, ''); // Remove all spaces from password
+
+      if (!user || !pass) {
         console.error("Missing EMAIL_USER or EMAIL_PASS environment variables.");
         return res.status(500).json({ error: "Server configuration error. Missing credentials." });
       }
 
       const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
+        service: 'gmail',
         auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
+          user,
+          pass,
         },
       });
 

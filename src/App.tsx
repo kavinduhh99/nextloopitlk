@@ -394,9 +394,10 @@ const Contact = () => {
         setErrorMessage(data.error || 'Failed to send message');
       }
     } catch (error) {
-      console.error(error);
+      console.error("Frontend Fetch Error:", error);
       setStatus('error');
-      setErrorMessage('A network error occurred. Please try again.');
+      const msg = error instanceof Error ? error.message : 'Could not reach server';
+      setErrorMessage(`Network error: ${msg}. Please check your connection or try again later.`);
     }
   };
 
