@@ -1,10 +1,26 @@
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
-import nodemailer from "nodemailer";
+import * as BREVO_MODULE from "@getbrevo/brevo";
 import dotenv from "dotenv";
 
+const BREVO: any = (BREVO_MODULE as any).default || BREVO_MODULE;
+
 dotenv.config();
+
+// Function to get Brevo API instance
+let apiInstance: any = null;
+function getBrevoApi() {
+  if (!apiInstance) {
+    const apiKey = process.env.BREVO_API_KEY;
+    if (!apiKey) {
+      throw new Error("BREVO_API_KEY is missing");
+    }
+    apiInstance = new BREVO.TransactionalEmailsApi();
+    apiInstance.setApiKey(BREVO.TransactionalEmailsApiApiKeys.apiKey, apiKey);
+  }
+  return apiInstance;
+}
 
 async function startServer() {
   const app = express();
@@ -21,52 +37,32 @@ async function startServer() {
     }
 
     try {
-      // Debug logging (check if variables exist)
-      console.log("Attempting to send email...");
-      if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-        console.error("Missing EMAIL_USER or EMAIL_PASS environment variables.");
-        return res.status(500).json({ error: "Server configuration error. Missing credentials." });
-      }
-
-      // Configure your email transporter
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true, // Use SSL
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
-        },
-      });
-
-      // Verify connection configuration
-      await transporter.verify();
-      console.log("Transporter verified successfully.");
-
-      const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: "nextloopit@gmail.com", // Recipient email
-        subject: `New Contact Form Submission from ${name}`,
-        text: `
-          Name: ${name}
-          Email: ${email}
-          Service: ${service}
-          Message: ${message}
-        `,
-        html: `
+      console.log("Attempting to send email via Brevo...");
+      const apiInstance = getBrevoApi();
+      
+      const sendSmtpEmail = new BREVO.SendSmtpEmail();
+      
+      sendSmtpEmail.subject = `New Contact Form Submission from ${name}`;
+      sendSmtpEmail.htmlContent = `
           <h3>New Contact Form Submission</h3>
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>Service:</strong> ${service}</p>
           <p><strong>Message:</strong></p>
           <p>${message}</p>
-        `,
+      `;
+      sendSmtpEmail.sender = { 
+        name: "NextLoop IT Contact Form", 
+        email: process.env.BREVO_SENDER_EMAIL || "hello@nextloopit.com" 
       };
+      sendSmtpEmail.to = [{ email: "nextloopit@gmail.com" }];
+      sendSmtpEmail.replyTo = { email: email, name: name };
 
-      await transporter.sendMail(mailOptions);
+      const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
+      console.log("Email sent successfully via Brevo:", data.body);
       res.status(200).json({ success: "Message sent successfully!" });
     } catch (error) {
-      console.error("Email error:", error);
+      console.error("Brevo Email error:", error);
       res.status(500).json({ error: "Failed to send message. Please try again later." });
     }
   });
