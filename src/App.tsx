@@ -384,14 +384,21 @@ const Contact = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      const text = await response.text();
+      let data;
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch (e) {
+        console.error("JSON Parse Error. Raw response:", text);
+        throw new Error(`Server returned invalid response (Status ${response.status}). Check server logs.`);
+      }
 
       if (response.ok) {
         setStatus('success');
         setFormData({ name: '', email: '', service: 'Web App Development', message: '' });
       } else {
         setStatus('error');
-        setErrorMessage(data.error || 'Failed to send message');
+        setErrorMessage(data.error || `Server Error ${response.status}: Failed to send message`);
       }
     } catch (error) {
       console.error("Frontend Fetch Error:", error);

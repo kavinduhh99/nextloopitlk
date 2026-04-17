@@ -52,6 +52,9 @@ app.post("/api/contact", async (req, res) => {
         user,
         pass,
       },
+      connectionTimeout: 5000, // 5 seconds
+      greetingTimeout: 5000,
+      socketTimeout: 5000,
     });
 
     await transporter.verify();
