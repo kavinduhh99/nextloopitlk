@@ -21,16 +21,27 @@ async function startServer() {
     }
 
     try {
+      // Debug logging (check if variables exist)
+      console.log("Attempting to send email...");
+      if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+        console.error("Missing EMAIL_USER or EMAIL_PASS environment variables.");
+        return res.status(500).json({ error: "Server configuration error. Missing credentials." });
+      }
+
       // Configure your email transporter
-      // NOTE: For production, use a professional service like SendGrid, Mailgun, or AWS SES.
-      // For Gmail, you might need an "App Password".
       const transporter = nodemailer.createTransport({
-        service: "gmail",
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true, // Use SSL
         auth: {
           user: process.env.EMAIL_USER,
           pass: process.env.EMAIL_PASS,
         },
       });
+
+      // Verify connection configuration
+      await transporter.verify();
+      console.log("Transporter verified successfully.");
 
       const mailOptions = {
         from: process.env.EMAIL_USER,

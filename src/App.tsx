@@ -30,8 +30,6 @@ import { motion, AnimatePresence } from 'motion/react';
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
 const services = [
   {
     title: "Web App Development",
@@ -96,6 +94,13 @@ const projects = [
     image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=800&q=80",
     description: "A high-performance multi-vendor e-commerce marketplace built with Next.js for superior speed and SEO.",
     link: "https://shopx.lk"
+  },
+  {
+    title: "CODShield",
+    category: "eCommerce Risk Intelligence",
+    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80",
+    description: "Advanced risk intelligence platform for e-commerce to detect and prevent fraudulent COD orders.",
+    link: "https://codshield.vercel.app/"
   }
 ];
 
@@ -513,6 +518,14 @@ const Chatbot = () => {
     setIsLoading(true);
 
     try {
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey) {
+        setMessages(prev => [...prev, { role: 'bot', text: "I'm sorry, the AI assistant is currently unavailable because the API key is not configured. Please add GEMINI_API_KEY to your environment variables." }]);
+        setIsLoading(false);
+        return;
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: [...messages.map(m => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.text }] })), { role: 'user', parts: [{ text: userMessage }] }],
