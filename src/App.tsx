@@ -67,11 +67,11 @@ const projects = [
     cta: "View Case Study"
   },
   {
-    title: "CODShield",
+    title: "BizFlow",
     category: "Revenue Protection AI",
     image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80",
     description: "Stopping profit leaks in real-time. This AI-driven system detects fraudulent orders before they hit the shipping floor, saving businesses millions in lost delivery costs.",
-    link: "https://codshield.vercel.app/",
+    link: "https://bizflow.vercel.app/",
     cta: "See How It Works"
   }
 ];
@@ -102,9 +102,9 @@ const Navbar = () => {
               {item}
             </a>
           ))}
-          <button className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all">
+          <a href="#contact" className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all">
             Get a Free Quote
-          </button>
+          </a>
         </div>
 
         <button className="md:hidden text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
@@ -130,9 +130,13 @@ const Navbar = () => {
                 {item}
               </a>
             ))}
-            <button className="bg-blue-600 text-white px-5 py-3 rounded-xl text-center font-semibold">
+            <a 
+              href="#contact" 
+              className="bg-blue-600 text-white px-5 py-3 rounded-xl text-center font-semibold"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
               Get Started
-            </button>
+            </a>
           </motion.div>
         )}
       </AnimatePresence>
@@ -157,12 +161,15 @@ const Hero = () => {
           <span className="inline-block px-4 py-1.5 rounded-full glass text-xs font-bold tracking-wider uppercase text-blue-400 mb-6">
             Launching • April 6, 2026
           </span>
-          <h1 className="text-5xl lg:text-7xl font-display font-bold tracking-tight mb-8 leading-[1.1]">
-            Your Website Is Either <br />
-            <span className="text-gradient">Printing Money Or Burning It.</span>
+          <h1 className="text-5xl lg:text-7xl font-display font-bold tracking-tight mb-6 leading-[1.1]">
+            Your Website Is Either A <br />
+            <span className="text-gradient">Profit Center Or A Cost Center.</span>
           </h1>
+          <p className="text-sm text-blue-400 font-bold uppercase tracking-widest mb-8">
+            Trusted by founders and established businesses for high-stakes growth.
+          </p>
           <p className="text-lg lg:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Stop letting competitors steal your market share. We build high-velocity sales systems that force visitors to take action and turn cold clicks into loyal, paying customers.
+            Stop yielding market share to faster competitors. We build high-velocity sales systems that turn visitors into loyal, paying customers with engineering precision.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <div className="group relative w-full sm:w-auto">
@@ -173,7 +180,7 @@ const Hero = () => {
                 Claim My Free Growth Strategy <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
               <p className="absolute top-full left-1/2 -translate-x-1/2 mt-2 text-[10px] text-slate-500 font-bold uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-                100% Free • No Obligation
+                100% Free • Secure & Private • No Obligation
               </p>
             </div>
             <a 
@@ -186,15 +193,15 @@ const Hero = () => {
             </a>
           </div>
           <div className="mt-12 flex flex-col items-center">
-            <p className="text-sm text-slate-400 font-medium mb-4">Elite engineering meets aggressive growth strategy.</p>
-            <div className="flex flex-wrap justify-center items-center gap-8 opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
-              <span className="text-xl font-black italic tracking-tighter decoration-blue-500 underline">TRUSTED</span>
-              <div className="flex items-center gap-2 font-display font-bold text-lg italic tracking-tighter">
-                <div className="w-6 h-6 bg-white rounded flex items-center justify-center text-black not-italic text-xs font-black">X</div>
-                MARKETPLACE
-              </div>
-              <div className="font-serif italic text-2xl font-light">NexusCorp</div>
-              <div className="text-lg font-mono font-bold tracking-widest">SKY-NET</div>
+            <p className="text-sm text-slate-400 font-medium mb-6 flex items-center gap-2">
+              <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+              Specialized Engineering for High-Growth Verticals:
+            </p>
+            <div className="flex flex-wrap justify-center items-center gap-10 opacity-50 font-bold text-xs uppercase tracking-[0.3em] text-slate-300">
+              <span className="hover:text-blue-400 transition-colors cursor-default">E-Commerce</span>
+              <span className="hover:text-blue-400 transition-colors cursor-default">FinTech</span>
+              <span className="hover:text-blue-400 transition-colors cursor-default">SaaS Infrastructure</span>
+              <span className="hover:text-blue-400 transition-colors cursor-default">AI Enterprise</span>
             </div>
           </div>
         </motion.div>
@@ -234,6 +241,42 @@ const Services = () => {
               </p>
             </motion.div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const RiskReversal = () => {
+  return (
+    <section className="py-24 overflow-hidden relative">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-blue-600/5 -z-10 blur-[120px]" />
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="glass p-12 lg:p-20 rounded-[60px] text-center border-blue-500/20">
+          <h2 className="text-3xl lg:text-4xl font-display font-bold mb-8">Engineering Trust into Every Partnership</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="space-y-4">
+              <div className="w-12 h-12 bg-blue-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <CheckCircle2 className="text-blue-400 w-6 h-6" />
+              </div>
+              <h4 className="font-bold text-xl">100% Satisfaction</h4>
+              <p className="text-slate-400 text-sm leading-relaxed text-center">We don't ship "okay." We ship results. We work until your vision is real and profitable.</p>
+            </div>
+            <div className="space-y-4">
+              <div className="w-12 h-12 bg-emerald-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <MessageSquare className="text-emerald-400 w-6 h-6" />
+              </div>
+              <h4 className="font-bold text-xl">Zero Tech Jargon</h4>
+              <p className="text-slate-400 text-sm leading-relaxed text-center">Transparent communication. You'll always know exactly what we are building and why it matters.</p>
+            </div>
+            <div className="space-y-4">
+              <div className="w-12 h-12 bg-purple-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Megaphone className="text-purple-400 w-6 h-6" />
+              </div>
+              <h4 className="font-bold text-xl">Performance First</h4>
+              <p className="text-slate-400 text-sm leading-relaxed text-center">Our systems are built for speed and ROI. If it doesn't move the needle, we don't build it.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -414,9 +457,9 @@ const Contact = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="glass rounded-[40px] overflow-hidden flex flex-col lg:flex-row">
           <div className="lg:w-1/3 bg-blue-600 p-12 text-white">
-            <h2 className="text-3xl font-display font-bold mb-6">Stop Leaving Money On The Table</h2>
-            <p className="text-blue-100 mb-10">
-              Your business is capable of 10x growth. Stop letting bad tech hold you back. Get your custom profit strategy today.
+            <h2 className="text-3xl font-display font-bold mb-6 italic tracking-tight">Stop Dreaming. <br />Start Dominating.</h2>
+            <p className="text-blue-100 mb-10 leading-relaxed">
+              Every day you spend overthinking is a day your competitors scale while you wait. Secure your slot now and let's build your profit engine.
             </p>
             <div className="space-y-6">
               <div className="flex items-center gap-4">
@@ -501,9 +544,16 @@ const Contact = () => {
                 >
                   {status === 'loading' ? 'Securing Connection...' : 'Secure My Free Strategy Session'}
                 </button>
-                <p className="mt-4 text-center text-[11px] text-slate-500 font-bold uppercase tracking-widest">
-                  ⚠️ Limited Capacity: Only 2 slots remaining for May • reply within 24 hours
-                </p>
+                <div className="mt-4 flex flex-col items-center gap-2">
+                  <p className="text-center text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">
+                    🚀 Scarcity Alert: Only 2 project slots available for May. <br />
+                    <span className="text-blue-400">Guaranteed response within 24 hours.</span>
+                  </p>
+                  <p className="flex items-center gap-4 text-[9px] text-slate-600 font-bold uppercase tracking-widest border-t border-white/5 pt-2 w-full justify-center">
+                    <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-emerald-500" /> 100% Confidential</span>
+                    <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-emerald-500" /> No Sales Pressure</span>
+                  </p>
+                </div>
               </div>
               
               {status === 'success' && (
@@ -709,6 +759,7 @@ export default function App() {
         <Services />
         <Portfolio />
         <About />
+        <RiskReversal />
         <Contact />
       </main>
       <Chatbot />
