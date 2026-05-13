@@ -76,7 +76,7 @@ const projects = [
   }
 ];
 
-const Navbar = () => {
+const Navbar = ({ onHome }: { onHome: () => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -89,7 +89,10 @@ const Navbar = () => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'glass py-4' : 'bg-transparent py-6'}`}>
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <div 
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={onHome}
+        >
           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-emerald-500 rounded-lg flex items-center justify-center">
             <Code2 className="text-white w-6 h-6" />
           </div>
@@ -98,11 +101,20 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-center gap-8">
           {['Services', 'Portfolio', 'About', 'Contact'].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+            <a 
+              key={item} 
+              href={`#${item.toLowerCase()}`} 
+              className="text-sm font-medium text-slate-300 hover:text-white transition-colors"
+              onClick={onHome}
+            >
               {item}
             </a>
           ))}
-          <a href="#contact" className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all">
+          <a 
+            href="#contact" 
+            className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all"
+            onClick={onHome}
+          >
             Get a Free Quote
           </a>
         </div>
@@ -125,7 +137,10 @@ const Navbar = () => {
                 key={item} 
                 href={`#${item.toLowerCase()}`} 
                 className="text-lg font-medium text-slate-300"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onHome();
+                }}
               >
                 {item}
               </a>
@@ -133,7 +148,10 @@ const Navbar = () => {
             <a 
               href="#contact" 
               className="bg-blue-600 text-white px-5 py-3 rounded-xl text-center font-semibold"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                onHome();
+              }}
             >
               Get Started
             </a>
@@ -708,7 +726,88 @@ const Chatbot = () => {
   );
 };
 
-const Footer = () => {
+const PrivacyPolicy = ({ onBack }: { onBack: () => void }) => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  return (
+    <div className="pt-32 pb-24 min-h-screen bg-slate-950">
+      <div className="max-w-4xl mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <button 
+            onClick={onBack}
+            className="flex items-center gap-2 text-blue-400 font-bold mb-8 hover:text-blue-300 transition-colors group"
+          >
+            <ArrowRight className="w-4 h-4 rotate-180 group-hover:-translate-x-1 transition-transform" /> Back to Home
+          </button>
+          
+          <div className="glass p-8 lg:p-12 rounded-[40px] border-white/5 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/5 blur-[100px] -z-10" />
+            <h1 className="text-4xl lg:text-5xl font-display font-bold mb-8 text-white">Privacy Policy</h1>
+            
+            <div className="space-y-8 text-slate-300 leading-relaxed">
+              <p className="text-lg">
+                NextLoop IT respects your privacy. Any information submitted through our website or advertisements will only be used to contact you regarding your inquiry, project request, or consultation.
+              </p>
+              
+              <div className="p-6 bg-blue-600/10 border border-blue-500/20 rounded-2xl">
+                <p className="font-bold text-blue-100 flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  We do not sell, share, or distribute your personal information to third parties.
+                </p>
+              </div>
+              
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold text-white flex items-center gap-3">
+                  <Layers className="w-5 h-5 text-blue-400" />
+                  Information collected may include:
+                </h3>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {[
+                    "Full Name",
+                    "Phone Number",
+                    "Email Address",
+                    "Project Requirements"
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-2 bg-white/5 p-3 rounded-xl border border-white/5">
+                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              <p>
+                Your information is securely stored and used only for business communication purposes. We follow industry-standard security protocols to ensure your data remains protected at all times.
+              </p>
+              
+              <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div>
+                  <p className="text-sm text-slate-500 mb-2 font-bold uppercase tracking-widest">Questions?</p>
+                  <a href="mailto:hello@nextloopit.com" className="text-xl font-bold text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-2">
+                    <Mail className="w-5 h-5" />
+                    hello@nextloopit.com
+                  </a>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm text-slate-500 italic">
+                    Last Updated: May 2026
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+const Footer = ({ onShowPrivacy }: { onShowPrivacy: () => void }) => {
   const socialLinks = [
     { icon: Facebook, href: "https://web.facebook.com/nextloopit" },
     { 
@@ -741,9 +840,17 @@ const Footer = () => {
             ))}
           </div>
 
-          <p className="text-slate-500 text-sm">
-            © 2026 NextLoop IT. All rights reserved.
-          </p>
+          <div className="flex flex-wrap items-center justify-center gap-8 text-sm">
+            <button 
+              onClick={onShowPrivacy}
+              className="text-slate-400 hover:text-white transition-colors underline decoration-slate-600 underline-offset-4"
+            >
+              Privacy Policy
+            </button>
+            <p className="text-slate-500">
+              © 2026 NextLoop IT. All rights reserved.
+            </p>
+          </div>
         </div>
       </div>
     </footer>
@@ -751,19 +858,27 @@ const Footer = () => {
 };
 
 export default function App() {
+  const [showPrivacy, setShowPrivacy] = useState(false);
+
   return (
     <div className="min-h-screen font-sans selection:bg-blue-500/30">
-      <Navbar />
+      <Navbar onHome={() => setShowPrivacy(false)} />
       <main>
-        <Hero />
-        <Services />
-        <Portfolio />
-        <About />
-        <RiskReversal />
-        <Contact />
+        {showPrivacy ? (
+          <PrivacyPolicy onBack={() => setShowPrivacy(false)} />
+        ) : (
+          <>
+            <Hero />
+            <Services />
+            <Portfolio />
+            <About />
+            <RiskReversal />
+            <Contact />
+          </>
+        )}
       </main>
       <Chatbot />
-      <Footer />
+      <Footer onShowPrivacy={() => setShowPrivacy(true)} />
     </div>
   );
 }
