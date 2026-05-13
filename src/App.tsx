@@ -1,4 +1,12 @@
 import { 
+  BrowserRouter as Router, 
+  Routes, 
+  Route, 
+  Link, 
+  useLocation,
+  useNavigate
+} from 'react-router-dom';
+import { 
   Code2, 
   Search, 
   ShoppingCart, 
@@ -24,7 +32,11 @@ import {
   Bot,
   User,
   Loader2,
-  MinusCircle
+  MinusCircle,
+  ArrowUp,
+  Zap,
+  Shield,
+  Smartphone
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import React, { useState, useEffect, useRef } from 'react';
@@ -76,9 +88,11 @@ const projects = [
   }
 ];
 
-const Navbar = ({ onHome }: { onHome: () => void }) => {
+const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -86,18 +100,26 @@ const Navbar = ({ onHome }: { onHome: () => void }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (location.pathname !== '/') {
+      e.preventDefault();
+      navigate('/' + href);
+      return;
+    }
+  };
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'glass py-4' : 'bg-transparent py-6'}`}>
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <div 
+        <Link 
+          to="/"
           className="flex items-center gap-2 cursor-pointer"
-          onClick={onHome}
         >
           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-emerald-500 rounded-lg flex items-center justify-center">
             <Code2 className="text-white w-6 h-6" />
           </div>
           <span className="text-2xl font-display font-bold tracking-tight">NextLoop<span className="text-blue-400">IT</span></span>
-        </div>
+        </Link>
 
         <div className="hidden md:flex items-center gap-8">
           {['Services', 'Portfolio', 'About', 'Contact'].map((item) => (
@@ -105,7 +127,7 @@ const Navbar = ({ onHome }: { onHome: () => void }) => {
               key={item} 
               href={`#${item.toLowerCase()}`} 
               className="text-sm font-medium text-slate-300 hover:text-white transition-colors"
-              onClick={onHome}
+              onClick={(e) => handleNavClick(e, `#${item.toLowerCase()}`)}
             >
               {item}
             </a>
@@ -113,7 +135,7 @@ const Navbar = ({ onHome }: { onHome: () => void }) => {
           <a 
             href="#contact" 
             className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all"
-            onClick={onHome}
+            onClick={(e) => handleNavClick(e, '#contact')}
           >
             Get a Free Quote
           </a>
@@ -137,9 +159,9 @@ const Navbar = ({ onHome }: { onHome: () => void }) => {
                 key={item} 
                 href={`#${item.toLowerCase()}`} 
                 className="text-lg font-medium text-slate-300"
-                onClick={() => {
+                onClick={(e) => {
                   setIsMobileMenuOpen(false);
-                  onHome();
+                  handleNavClick(e, `#${item.toLowerCase()}`);
                 }}
               >
                 {item}
@@ -148,9 +170,9 @@ const Navbar = ({ onHome }: { onHome: () => void }) => {
             <a 
               href="#contact" 
               className="bg-blue-600 text-white px-5 py-3 rounded-xl text-center font-semibold"
-              onClick={() => {
+              onClick={(e) => {
                 setIsMobileMenuOpen(false);
-                onHome();
+                handleNavClick(e, '#contact');
               }}
             >
               Get Started
@@ -726,24 +748,63 @@ const Chatbot = () => {
   );
 };
 
-const PrivacyPolicy = ({ onBack }: { onBack: () => void }) => {
+const ScrollToTopButton = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.scrollY > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+    window.addEventListener('scroll', toggleVisibility);
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.5 }}
+          onClick={scrollToTop}
+          className="fixed bottom-24 right-6 z-[60] w-12 h-12 bg-blue-600/80 hover:bg-blue-600 text-white rounded-full flex items-center justify-center shadow-xl shadow-blue-600/20 backdrop-blur-sm transition-all group border border-white/10"
+        >
+          <ArrowUp className="w-6 h-6 group-hover:-translate-y-1 transition-transform" />
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const PrivacyPolicy = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
-    <div className="pt-32 pb-24 min-h-screen bg-slate-950">
+    <div className="pt-32 pb-24 min-h-screen bg-slate-950 text-left">
       <div className="max-w-4xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <button 
-            onClick={onBack}
+          <Link 
+            to="/"
             className="flex items-center gap-2 text-blue-400 font-bold mb-8 hover:text-blue-300 transition-colors group"
           >
             <ArrowRight className="w-4 h-4 rotate-180 group-hover:-translate-x-1 transition-transform" /> Back to Home
-          </button>
+          </Link>
           
           <div className="glass p-8 lg:p-12 rounded-[40px] border-white/5 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/5 blur-[100px] -z-10" />
@@ -807,7 +868,7 @@ const PrivacyPolicy = ({ onBack }: { onBack: () => void }) => {
   );
 };
 
-const Footer = ({ onShowPrivacy }: { onShowPrivacy: () => void }) => {
+const Footer = () => {
   const socialLinks = [
     { icon: Facebook, href: "https://web.facebook.com/nextloopit" },
     { 
@@ -825,12 +886,12 @@ const Footer = ({ onShowPrivacy }: { onShowPrivacy: () => void }) => {
     <footer className="py-12 border-t border-white/5">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-emerald-500 rounded flex items-center justify-center">
               <Code2 className="text-white w-5 h-5" />
             </div>
             <span className="text-xl font-display font-bold tracking-tight">NextLoop<span className="text-blue-400">IT</span></span>
-          </div>
+          </Link>
           
           <div className="flex items-center gap-6">
             {socialLinks.map((social, i) => (
@@ -841,12 +902,12 @@ const Footer = ({ onShowPrivacy }: { onShowPrivacy: () => void }) => {
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-8 text-sm">
-            <button 
-              onClick={onShowPrivacy}
+            <Link 
+              to="/privacy-policy"
               className="text-slate-400 hover:text-white transition-colors underline decoration-slate-600 underline-offset-4"
             >
               Privacy Policy
-            </button>
+            </Link>
             <p className="text-slate-500">
               © 2026 NextLoop IT. All rights reserved.
             </p>
@@ -857,28 +918,43 @@ const Footer = ({ onShowPrivacy }: { onShowPrivacy: () => void }) => {
   );
 };
 
-export default function App() {
-  const [showPrivacy, setShowPrivacy] = useState(false);
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 
+const Home = () => {
   return (
-    <div className="min-h-screen font-sans selection:bg-blue-500/30">
-      <Navbar onHome={() => setShowPrivacy(false)} />
-      <main>
-        {showPrivacy ? (
-          <PrivacyPolicy onBack={() => setShowPrivacy(false)} />
-        ) : (
-          <>
-            <Hero />
-            <Services />
-            <Portfolio />
-            <About />
-            <RiskReversal />
-            <Contact />
-          </>
-        )}
-      </main>
-      <Chatbot />
-      <Footer onShowPrivacy={() => setShowPrivacy(true)} />
-    </div>
+    <>
+      <Hero />
+      <Services />
+      <Portfolio />
+      <About />
+      <RiskReversal />
+      <Contact />
+    </>
+  );
+};
+
+export default function App() {
+  return (
+    <Router>
+      <ScrollToTop />
+      <div className="min-h-screen font-sans selection:bg-blue-500/30">
+        <Navbar />
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          </Routes>
+        </main>
+        <Chatbot />
+        <ScrollToTopButton />
+        <Footer />
+      </div>
+    </Router>
   );
 }
